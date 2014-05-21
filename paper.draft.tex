@@ -2,75 +2,143 @@ ANNOUNCE CORRECTLY
 
 Introduction
 ============
-Distributed Hash Table (DHT) is a decentralized system that provides lookup services similar to hash tables; (key, values) pairs are stored in a DHT, and any particular node can efficiently retrieve the associated value. The descentralized nature and the scalability characteristics of DHT makes it the preferred way for storing shared state on P2P applications (e.g. peer lists). Kademlia and Mainline DHT are the most widley deployed DHTs world wide, creating overlay networks of milions of nodes [1].
+Distributed Hash Table (DHT) is a decentralized system that provides lookup services 
+similar to hash tables; (key, values) pairs are stored in a DHT, and any particular 
+node can efficiently retrieve the associated value. The descentralized nature and 
+the scalability characteristics of DHT makes it the preferred way for storing shared 
+state on P2P applications (e.g. peer lists). Kademlia and Mainline DHT are the most 
+widley deployed DHTs world wide, creating overlay networks of milions of nodes [1].
 
 [1] http://www.cs.helsinki.fi/u/jakangas/MLDHT/
 
-DHTs not only serve good for storing peer swarms on P2P applications. These overlay networks are used on a high variety of Internet services. For example, CDNS [1, 2], application-level multicast, instant messaging, domain name services, web caching or distributed file systems. #TODO references for each example.
+However, DHTs not only serve good for storing peer swarms on P2P applications. These overlay 
+networks are used on a large variety of Internet services. For example, CDNS [1, 2], 
+application-level multicast, instant messaging, domain name services, web caching 
+or distributed file systems. #TODO references for each example.
 
 [1] Akamai
 [2] Digital island
 
-On the other hand, DHT technologies are mainly evolving thowards the Internet. However, emerging networks like Communit Networks [??] are very similar to the Internet but also have some differences.
+On the other hand, DHT technologies are mainly evolving thowards the Internet. 
+Even though emerging networks like Communit Networks [??] are based on the same 
+fundamental technology than Internet, they also have their own differences and peculiarities.
 
-Community Networks raise from the dramatic drop of wireless network equipement cost over the last decade which has enabled end-users to build their own network independently from traditional telecomunications providers.
+Community Networks raise from the dramatic drop of wireless network equipement 
+cost over the last decade which has enabled end-users to build their own network 
+independently from traditional telecomunications providers. This has a dramatic 
+impact on the network properties. Most of its traffic flows through short-distance, 
+low-throughput, high-latency wireless links, build with cheap low-end hardware.
 
-Community Network infraestructure has some distinctive characteristics from the one used to power the Internet. Most of its traffic flows through short-distance, low-throughput, high-latency wireless links, build with cheap low-end hardware.
+The topology characteristics of the network are also a bit different from the Internet. 
+On village-like environments, typical CN deployment may involve a single Access Point 
+on the top-roof of the villange from which all the clients contect to. On cities, 
+usually the topology is a mesh-like network. Therefore, in both cases the network 
+tends to forms clusters of nodes with a very few hops between each other but interconnected 
+by long-distance intervilage wireless links.
 
-The topology characteristics of the network are also a bit different from the Internet. On village-like environments, typical CN deployment may involve a single Access Point on the top-roof of the villange which where all the clients contect to. On cities, usually the topology is a mesh-like network. Therefore, in both cases the network tends to forms clusters of nodes with a very few hops between each other but interconnected by long-distance _intervilage_ wireless links.
+Locality-aware applications become much important in CN because the cost of leaving 
+_your neighberhood cluster_ is particularly expensive since it may involve going 
+through several kilometers of unreliable microwave links, with more packet loss, 
+more jitter, higher latency and lower throughput.
 
-Locality-aware applications are much important in CN because the cost of leaving _your neighberhood cluster_ is not cheap since it may involve going through several kilometers of unreliable microwave links, with some packet loss, jitter, high latency and low throughput.
-
-In this paper, we study the locality of DHT overlay on the context of Community Networks. In the next section background on DHT locality is presented
+In this paper, we study the locality of DHT overlay on the context of Community 
+Networks. In the next section background on DHT locality is presented.
 
 
 Background
 ==========
-Network proximity in Distributed Hash Tables has been extensiviely studied [1, 2, 3]. Three basic approaches have been suggested for exploring proximity in DHT protocols:
+Network proximity (locality) in Distributed Hash Tables has been extensiviely studied [1, 2, 3]. 
+Three basic approaches have been suggested for exploring proximity in DHT protocols:
 
 i) Geographic Layout
-The node IDs are assigned in a manner that ensures that nodes that are close in the network topology are close in the node ID space. Geographic Layout was explored as one technique to improve routing performance in CAN[0]. In one implementation, nodes measure the RTT between themselves and a set of landmark servers to compute the coordinates opf the node in the CAN space.
+The node IDs are assigned in a manner that ensures that nodes that are close in the 
+network topology are close in the node ID space. Geographic Layout was explored as 
+one technique to improve routing performance in CAN[0]. In one implementation, 
+nodes measure the RTT between themselves and a set of landmark servers to compute 
+the coordinates opf the node in the CAN space.
 
 ii) Proximity Routing
-The routing tables are built without taking network proximity into account but the routing algorithm chooses a nearby node at each hop from among the ones in the routing table. Proximity routing was first proposed in CAN [0]. It involves no changes to routing table construction and maintenance, because routing tables are built without taking network proximity into account. TODO complete
+The routing tables are built without taking network proximity into account but the 
+routing algorithm chooses a nearby node at each hop from among the ones in the 
+routing table. Proximity routing was first proposed in CAN [0]. It involves no 
+changes to routing table construction and maintenance, because routing tables are 
+built without taking network proximity into account. TODO complete
 
 iii) Proximity Neighbour Selection
-Routing table construction takes network proximity into account. Routing table entries are chosen to refer to nodes that are nearby in the network topology, among all live nodes with appropiate node IDs. Proximity neighbour selection is used in Tapestry and Pastry.
+Routing table construction takes network proximity into account. Routing table 
+entries are chosen to refer to nodes that are nearby in the network topology, 
+among all live nodes with appropiate node IDs. Proximity neighbour selection is 
+used in Tapestry and Pastry.
 
 [0] Exploring Network Proximity
 [1] LDHT
 
-Geographic Layout techniques are very effective for building overlays with a high degree of physical locality. However, we found that in the context of community networks it may not be the best choice. Network splits are common due to both, hardware malfunction (low-end hardware used) and humman errors during management operations (difficulty of operating a descentralized network). Because of network splits a perfect locality may lead to entire portions of the DHT ID space inaccessible. In this sense Proximity routing and Proximity neighbour selection provides better reliability since the Node IDs have nothing to do with the geographic location.
+Geographic Layout techniques are very effective for building overlays with a 
+high degree of physical locality. However, we found that in the context of 
+community networks it may not be the best choice. Network splits are common due to both, 
+hardware malfunction (low-end hardware used) and humman errors during management 
+operations (difficulty of operating a highly descentralized network). Because of network 
+splits a perfect locality may lead to entire portions of the DHT ID space inaccessible. 
+In this sense, Proximity Routing and Proximity Neighbour Selection provides much better 
+reliability since the Node IDs have nothing to do with the geographic location.
 
-Intuitively proximity routing may not work as good as Proximity neighbour selection. Because the routing table is small (compared to the total number of nodes), there is not a lot of candidates to choose from. Also priorizing pysical locality over logical locality may actually lead to an increase on the number of DHT hops when looking for a particular ID.
+Intuitively Proximity Routing may not work as good as Proximity Neighbour Selection. 
+Because the routing table is small (compared to the total number of nodes), there 
+are not a lot of candidates to choose from. Also priorizing pysical locality over 
+logical locality may actually lead to an increase on the number of DHT hops for 
+lookup operations.
 
-We think that Proximity Neighbour Selection offers the best characteristics for deployment on CN. ID space is uniformly distributed over all the network making it robust, and good enough locality can still be obtained by choosing good candidates four routing table entries.
+We believe that Proximity Neighbour Selection offers the best characteristics for 
+deployment on CN. ID space is uniformly distributed over the whole network, making 
+it robust, while good enough locality can still be achieved by choosing good candidates 
+as routing table entries.
 
 
 Mainline DHT
 ============
-We based our DHT evaluation on Mainline DHT. MLDHT is a Kademlia-based Distributed Hash Table used by BitTorrent clients to find peers via the BitTorrent protocol. MLDHT is the largest DHT network in the Internet, meassures from 2013 show from 10 million to 25 million users, with a daily churn of at least 10 million[1].
+We based our DHT evaluation on Mainline DHT (MLDHT). MLDHT is a Kademlia-based 
+Distributed Hash Table used by BitTorrent clients to find peers via the BitTorrent 
+protocol. MLDHT is the largest DHT network in the Internet, meassures from 2013 
+show from 10 million to 25 million users, with a daily churn of at least 10 million[1].
 
-Mainline DHT protocol is very simple, limited to four control messages:
+Mainline DHT protocol is actually pretty simple, limited to four control messages:
 
-1) PING: probe a node's availability. If the node fails to respond for some time, it will be purged out of the routing table.
+1) PING: probe a node's availability. If the node fails to respond for some time, 
+    it will be purged out of the routing table.
 2) FIND_NODE: given a target ID, this message is used to find the {k} closest neighbors of the ID.
-3) GET_PEERS: fiven an infohash, get the initial peer set. Notice that our evaluation is not about the bittorrent peers returned by this query.
+3) GET_PEERS: fiven an infohash, get the initial peer set. Notice that our evaluation 
+    is not about the bittorrent peers returned by this query.
 4) ANNOUNCE_PEER: a peer announces it belongs to a swarm.
 
 
-Their simplicity and the fact that is a widely deployed protocol makes its evaluation eassier, since the compleixity is low and there are several MLDHT implementations to choose from. We looked at libtorrent and PYMDHT.
+Its simplicity and the fact that it is a widely deployed protocol makes its evaluation 
+study somehow eassier, since the compleixity is low and there are several MLDHT 
+implementations to choose from. We looked at libtorrent and PYMDHT.
 
-libtorrent[1] was our first consideration, is a well known open source implementation of BitTorrent protocol and it has support for Mainline DHT. However, we found out that its public API provides little information about the routing state, only node IDs, not IP addresses or RTT. This is not surprising since it is mainly designed focused on BitTorrent aplications, not for routing characteristics evaluation. Also libtorrent implements a highly tunne and complicated routing algorithm with a lot of corner cases and optimizations making its behaviour less predictable[2].
+libtorrent[1] was our first consideration, is a well known open source implementation 
+of BitTorrent protocol and it has support for Mainline DHT. However, we quickly found out 
+that its public API provides little information about the DHT routing state, only 
+providing the node ID of its entrie, not IP addresses or RTT. This is not surprising since its designe is 
+focused on BitTorrent aplications, not on DHT routing characteristics evaluation. 
+Also libtorrent implements a highly tunne and complicated routing algorithm with a 
+lot of corner cases and optimizations making its behaviour less predictable[2].
 
     [1] http://www.rasterbar.com/products/libtorrent/
     [2] http://cs.helsinki.fi/liang.wang/publications/P2P2013_13.pdf
 
-PYMDHT [1] is a flexible Python implementation of the Mainline DHT protocol, specifically designed for MDHT evaluation. This fact has made us choose this library over libtorrent, even though PYMDHT current state is experimental, the codebase has room for improvement and there is no documentation available.
+PYMDHT [1] is a flexible Python implementation of the Mainline DHT protocol, 
+specifically designed for MDHT evaluation. This fact has made us choose this 
+library over libtorrent. Even though PYMDHT current state is experimental, 
+the codebase has room for improvement and there is no public documentation available.
 
     [1] https://github.com/rauljim/pymdht
 
-Mainline DHT as described in Bittorrent Enhacement Proposal 5 (BEP5) [1] does not contemplate means for locality. However, implementers of this DHT are free to choose whatever routing policy they wish to. In the case of PYMDHT it supports a plugin system for this routing policy. The library ships with an implementation of a Proximity Neighbour Selection routing policy defined by NICE[2], based on RTT meassurements, which is very interesting for our locality evaluation.
+Mainline DHT as described in Bittorrent Enhacement Proposal 5 (BEP5) [1] does not 
+contemplate means for locality. However, implementers of this DHT are free to choose 
+whatever routing policy they wish to. In the case of PYMDHT it supports a plugin system 
+for the routing policy. The library ships with an implementation of a Proximity Neighbour 
+Selection routing policy defined by NICE[2], based on RTT meassurements, which 
+is very interesting for our locality evaluation.
 
     [1] http://www.bittorrent.org/beps/bep_0005.html
     [2] ???
@@ -78,13 +146,16 @@ Mainline DHT as described in Bittorrent Enhacement Proposal 5 (BEP5) [1] does no
 
 
 MLDHT Locality Evaluation on Community Lab
-=================
-The evaluation has been performed in Community Lab [1], a Community Networks Testbed by the CONFINE project[2], is a global facility for experimentation with network technologies and services for community networks.
+==========================================
+The evaluation has been performed in Community Lab [1], a Community Networks Testbed 
+by the CONFINE project[2], is a global facility for experimentation with network 
+technologies and services for community networks.
 
-Interestingly, Community Lab topology has also the type of node clustering commonly seen in community network villages. In the case of Community Lab those are the nodes at UPC-Lab where only one forwarding device is between every node[1].
+Interestingly, Community Lab topology has also the type of node clustering commonly 
+seen in community network villages. In the case of Community Lab those are the nodes 
+at UPC-Lab where only one forwarding device sits between every node[1].
 
 [1] http://monitor.confine-project.eu:8000/networktrace/
-
 
 
 
@@ -97,7 +168,8 @@ Interestingly, Community Lab topology has also the type of node clustering commo
 * Why Proximity Neighbour Selection is the best approach and the others are crap
 * Considterations: Small set of candidates decreases performance, size of the dht
 
-* Even that wireless links have a lot of jitter (latency variation) we decided to use the RTT metric because it was the most feasible to use.
+* Even that wireless links have a lot of jitter (latency variation) we decided to 
+use the RTT metric because it was the most feasible to use.
 
 * Two routing policies: BEP5 vs NICE RTT (Proximity Neighbour Selection)
 * Tune DHT size
@@ -110,7 +182,11 @@ Interestingly, Community Lab topology has also the type of node clustering commo
 * CHURN
 
 
-Because of the reduced number of available nodes in our testbed (in relation to the massive size of DHTs real deployments) we have found that we are not able to reproduce meaningful results of the locality characteristics of MDHT. Therefore, we have crafted our experiments intentionaly trying to ___ rather than real workload behaviours.
+Because of the reduced number of available nodes in our testbed (in relation to 
+the massive DHT size in real deployments) we have found that we are not able to 
+reproduce meaningful results of the locality characteristics of MLDHT. 
+Therefore, we have crafted some workloads trying to artificaly promote locality 
+rather than focus on real workload behaviours.
 
 NUM_NODES_PER_BUCKET = 1
 
@@ -118,9 +194,13 @@ Not able to reduce the ID space for library limitations
 
 High load workload
 ------------------
-Each DHT node publishes N info hashes and perform get_peers() of all the infohashes that the other nodes have published (NUM_NODES-1)*NUM_HASHES of total queries every minute.
+Each DHT node publishes N info hashes and perform get_peers() of all the infohashes 
+that the other nodes have published (NUM_NODES-1)*NUM_HASHES of total queries every minute.
 
-We made sure that the cache size of each node is large enough to hold all the IDs. Because of caching *ONE MAY EXPECT THAT* we expected data to eventually propagate to all nodes. Therefore, at some point the locality of the routing table should start to stabilize and converge to entries with low RTT (and thus more local).
+We made sure that the cache size of each node is large enough to hold all the IDs. 
+Because of caching *ONE MAY EXPECT THAT* we expected data to eventually propagate 
+to all nodes. Therefore, at some point the locality of the routing table should start 
+to stabilize and converge to entries with low RTT (and thus more local).
 
 *All routes
 
@@ -129,18 +209,22 @@ cache size: 10000 entries vs 100 entries vs cache off
 
 Crawded bucket workload
 -----------------------
-All our nodes have an ID within the same bucket, and all nodes perform get_peers queries of the same infohash that is also on the same bucket.
+All our nodes have an ID within the same bucket, and all nodes perform get_peers 
+queries of the same infohash that is also on the same bucket.
 
 We expect routing table entries RTT to converge to an small value
 
 Lonely node workload
 --------------------
 
-This is a variation of the crowded bucket workload. in this case all nodes are members of the same bucket except one, that its ID belongs to the fardest bucket.
+This is a variation of the crowded bucket workload. in this case all nodes are 
+members of the same bucket except one, that its ID belongs to the fardest bucket.
 
 The lonley node is selected from a cluster of nodes (lab) because it has a lot of neighbors 
 
-We expected the lonely node to select a very good entry for the crowded bucket. But surprisingly the routing table remained empty, despite of the lonley node being able to send and recieve get_peers queries and responses.
+We expected the lonely node to select a very good entry for the crowded bucket. 
+But surprisingly the routing table remained empty, despite of the lonley node being 
+able to send and recieve get_peers queries and responses.
 
 
 Future Work
@@ -153,7 +237,7 @@ Future Work
 * Current state of tools for MDHT evaluation is not mature enough for our background and scheduled time for our project.
 
 * Communitylab suffers from interconnection problems between community networks, also Internet connectivity is not widely available; considerably reducing the number of useful nodes. Because, nodes don't always see each other and since Internet is not always available it increases the complexity of deploying our experiment in those disconnected nodes beyond what we consider feasible for our project's schedule.
-* Reasons for low number of nodes: offline, no internet and isolated, lack of public ips
+* Reasons for low number of nodes: offline, no Internet and isolated, lack of CN public ips
 
 
 Conclusions
@@ -162,6 +246,8 @@ We did not proved it but improving locality on MDHT sounds theoretically plausib
 
 Locality in MDHT seems non-existent under the analyzed workloads. Even when routing policies take into account physical information like Round trip time.
 
+Naive changes on the routing table policy in order to improve locality may actually 
+harm locality because of the nature of the MLDHT. More hops? disrupt logical locality?
 
 References
 ==========
