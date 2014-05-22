@@ -89,6 +89,6 @@ for result in glob.glob('results/' + FILES):
         
         plt.subplot(313)
         plt.title(result + " Slotted")
-        plt.plot(t_result, h_result, 'g^', t_result, l_result, 'bs', t_result, line,'g-', )
+        plt.plot(t_result, h_result, 'g^', t_result, l_result, 'bs', t_result, line,'g-')
         plt.show()
 #        plt.savefig(result + '.png')
