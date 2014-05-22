@@ -77,17 +77,18 @@ for result in glob.glob('results/' + FILES):
             if time_hops:
                 t_result.append(time)
                 h_result.append(sum(time_hops)/len(time_hops) if time_hops else None)
-                l_result.append(sum(time_latencies)/len(time_latencies)/10 if time_latencies else None)
-        plt.subplot(313)
-        plt.title(result + " Slotted")
+                l_result.append(sum(time_latencies)/len(time_latencies)/20 if time_latencies else None)
         
         xi = np.array(t_result)
         xi = np.array(t_result)
         A = np.array([ xi, np.ones(len(xi))])
         y = np.array(h_result, dtype=np.float)
         y = np.ma.masked_array(y, np.isnan(y))
-        w = np.linalg.lstsq(A.T,y)[0] # obtaining the parameters
-        line = w[0]*xi+w[1] # regression line
+        w = np.linalg.lstsq(A.T,y)[0]
+        line = w[0]*xi+w[1]
+        
+        plt.subplot(313)
+        plt.title(result + " Slotted")
         plt.plot(t_result, h_result, 'g^', t_result, l_result, 'bs', t_result, line,'g-', )
         plt.show()
 #        plt.savefig(result + '.png')
