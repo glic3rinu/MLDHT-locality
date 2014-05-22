@@ -68,7 +68,7 @@ while True:
     # Log routing table entries
     with open('/root/routing.table', 'a') as log:
         log.write(' '.join((pid, timestamp, addrs, rtts)) + '\n')
-    time.sleep(50)
+    time.sleep(random.randrange(60, 300))
     # Make queries to all IDs
     with open('/root/infohashes.list', 'r') as info_file:
         for info_hash in info_file.readlines():
@@ -80,9 +80,9 @@ echo "Patching pymdht..."
 # try to prevent minitwisted to crash when address is unreachable ...
 sed -i "s/self._all_subnets.remove(utils.get_subnet(addr))/try: self._all_subnets.remove(utils.get_subnet(addr))\n        except KeyError: pass/" core/bootstrap.py
 # Adapt bucket dimensioning to our DHT small size
-sed -i "s/^DEFAULT_NUM_NODES = 8/DEFAULT_NUM_NODES = 2/" plugins/routing_nice_rtt.py
+sed -i "s/^DEFAULT_NUM_NODES = 8/DEFAULT_NUM_NODES = 1/" plugins/routing_nice_rtt.py
 # Increase cache size
-sed -i "s/^CLEANUP_COUNTER = 100/CLEANUP_COUNTER = 10000000/" core/tracker.py
+sed -i "s/^CLEANUP_COUNTER = 100/CLEANUP_COUNTER = 1/" core/tracker.py
 # Change routing policy
 sed -i "s/^MAX_NUM_TIMEOUTS = 2/MAX_NUM_TIMEOUTS = -1/" plugins/routing_nice_rtt.py
 sed -i "s/if rtt < rnode.rtt \* (1 - (rnode_age \/ 7200)):/if rtt < rnode.rtt:/" plugins/routing_nice_rtt.py

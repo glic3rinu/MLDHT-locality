@@ -3,7 +3,7 @@
 # Deploys experiment
 #
 # USAGE:
-#   cat nodes.list | bash deploy.sh
+#   cat nodes.list | bash deploy.sh EXPNUM
 #
 # REQUIRES:
 #   python get-mgmt-ips.py SLICE_ID > nodes.list
@@ -15,8 +15,9 @@
 
 BOOTSTRAP="10.139.40.123"
 COUNTER=0
-IDS_PER_NODE=2
+IDS_PER_NODE=1
 IPS=''
+EXPNUM=$1
 
 while read IP; do
     IPS="$IPS\n$IP"
@@ -45,18 +46,18 @@ for i in range($COUNTER+2):
     ident = base_ident[:30] + ident[30:]
     print(ident)
 
-" | python > /tmp/infohashes.list
+" | python > /tmp/infohashes2.list
 
 
-FILES="/tmp/infohashes.list bootstrap_unstable experiment3.sh collect.sh"
+FILES="/tmp/infohashes.list bootstrap_unstable experiment$EXPNUM.sh collect.sh"
 
 
 COUNTER=0
 echo -e "$IPS" | while read IP; do
     { echo "$IP" &&
       scp -o stricthostkeychecking=no $FILES root@[$IP]: &&
-      ssh root@$IP 'pkill -f client.py; pkill -f experiment2.sh; pkill -f experiment3.sh' ;
-      CMD="nohup bash experiment3.sh $BOOTSTRAP $COUNTER $IDS_PER_NODE" &&
+      ssh root@$IP 'pkill -f client.py; pkill -f experiment.sh; pkill -f experiment2.sh; pkill -f experiment3.sh' ;
+      CMD="nohup bash experiment$EXPNUM.sh $BOOTSTRAP $COUNTER $IDS_PER_NODE" &&
       echo "$CMD" ;
       ssh root@$IP "$CMD" ;
       echo "clossing ssh connection" ;
