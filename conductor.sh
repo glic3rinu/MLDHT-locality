@@ -27,7 +27,7 @@ python split-nodes.py 3 2 | bash deploy.sh 2
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-exp2-cache100-node39
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp2-churn3-cache100-node39
 
 sleep 300
 killall ssh
@@ -41,7 +41,7 @@ python split-nodes.py 3 2 | bash deploy.sh 3
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-exp3-cache100
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp3-churn3-cache100
 
 sleep 300
 killall ssh
@@ -84,7 +84,7 @@ python split-nodes.py 3 2 | bash deploy.sh 2
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-exp2-cache100-node102
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp2-churn3-cache100-node102
 
 sleep 300
 killall ssh
@@ -98,7 +98,7 @@ python split-nodes.py 3 2 | bash deploy.sh 3
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-exp3-cache100-2
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp3-churn3-cache100-2
 
 sleep 300
 killall ssh
