@@ -8,4 +8,4 @@ python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment
 sleep 10
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 100
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-ids1-cache10000000
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/churn3-ids1-cache1

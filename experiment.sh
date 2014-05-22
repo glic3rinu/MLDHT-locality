@@ -82,7 +82,7 @@ sed -i "s/self._all_subnets.remove(utils.get_subnet(addr))/try: self._all_subnet
 # Adapt bucket dimensioning to our DHT small size
 sed -i "s/^DEFAULT_NUM_NODES = 8/DEFAULT_NUM_NODES = 1/" plugins/routing_nice_rtt.py
 # Increase cache size
-sed -i "s/^CLEANUP_COUNTER = 100/CLEANUP_COUNTER = 10000000/" core/tracker.py
+sed -i "s/^CLEANUP_COUNTER = 100/CLEANUP_COUNTER = 1/" core/tracker.py
 # Change routing policy
 sed -i "s/^MAX_NUM_TIMEOUTS = 2/MAX_NUM_TIMEOUTS = -1/" plugins/routing_nice_rtt.py
 sed -i "s/if rtt < rnode.rtt \* (1 - (rnode_age \/ 7200)):/if rtt < rnode.rtt:/" plugins/routing_nice_rtt.py
