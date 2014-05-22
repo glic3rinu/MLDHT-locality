@@ -47,6 +47,8 @@ for i in range($COUNTER+2):
     print(ident)
 
 " | python > /tmp/infohashes2.list
+cp /tmp/infohashes2.list /tmp/infohashes3.list
+cp /tmp/infohashes$EXPNUM.list /tmp/infohashes.list
 
 
 FILES="/tmp/infohashes.list bootstrap_unstable experiment$EXPNUM.sh collect.sh"
