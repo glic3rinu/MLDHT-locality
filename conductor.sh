@@ -2,12 +2,12 @@ source utils.sh
 
 COUNTER=$(wc -l nodes.list|awk {'print $1'})
 
-python split-nodes.py | bash execute.sh "rm routing.hops"
-sleep 100
+#python split-nodes.py | bash execute.sh "rm routing.hops"
+#sleep 100
 
-python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
-sleep 180
-killall ssh
+#python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
+#sleep 180
+#killall ssh
 
 sed -i 's#CLEANUP_COUNTER = 100/"#CLEANUP_COUNTER = 10000000/"#' experiment11.sh
 gen_ids $COUNTER 2
