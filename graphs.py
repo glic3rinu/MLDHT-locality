@@ -7,8 +7,18 @@ from pylab import plot,show
 
 
 FILES = '*'
-if len(sys.argv) == 2:
+LONELY = None
+
+if len(sys.argv) > 2:
     FILES = sys.argv[1]
+
+if len(sys.argv) == 3:
+    LONELY = int(sys.argv[2]) + 1
+    with open('nodes.list', 'r') as nodes:
+        for num, line in enumerate(nodes, 1):
+            if num == LONELY:
+                LONELY = "0000000000f9_%s" % line.split(':')[3]
+                break
 
 
 for result in glob.glob('results/' + FILES):
@@ -32,13 +42,14 @@ for result in glob.glob('results/' + FILES):
             else:
                 continue
             
-            nodes.setdefault(node, [])
-            time = int(time.split('.')[0])
-            nodes[node].append((time, hops, latencies))
+            if not LONELY or LONELY == node:
+                nodes.setdefault(node, [])
+                time = int(time.split('.')[0])
+                nodes[node].append((time, hops, latencies))
             
-            key = int(str(time)[:-2] + '00')
-            times.setdefault(key, [])
-            times[key].append((time, hops, latencies))
+                key = int(str(time)[:-2] + '00')
+                times.setdefault(key, [])
+                times[key].append((time, hops, latencies))
         
         plt.figure(1)
         plt.title(result)

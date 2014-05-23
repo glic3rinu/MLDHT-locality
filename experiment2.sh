@@ -10,7 +10,7 @@ IDS_PER_NODE=$3
 
 SELECTED="False"
 # 102 39
-if [[ "$NODE_NUMBER" == "39" ]]; then
+if [[ "$NODE_NUMBER" == "102" ]]; then
     SELECTED="True"
 fi
 python --version || { apt-get update && apt-get install -y --force-yes git python traceroute ; }
