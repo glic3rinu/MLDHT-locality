@@ -25,7 +25,7 @@ COUNTER=0
 while read IP; do
     { echo "$IP" &&
       scp -o stricthostkeychecking=no $FILES root@[$IP]: &&
-      ssh root@$IP 'pkill -f client.py; pkill -f experiment1.sh; pkill -f experiment2.sh; pkill -f experiment3.sh; pkill -f experiment11.sh' ;
+      ssh root@$IP 'pkill -f client.py; pkill -f bash; pkill -f sleep;';
       CMD="nohup bash experiment$EXPNUM.sh $BOOTSTRAP $COUNTER $IDS_PER_NODE" &&
       echo "$CMD" ;
       ssh root@$IP "$CMD" ;

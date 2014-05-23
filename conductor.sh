@@ -15,7 +15,7 @@ python split-nodes.py | bash deploy.sh 11 2
 sleep $((62*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp11-ids2-cache10000000
 
-sleep 180
+sleep 300
 killall ssh
 
 sed -i 's#CLEANUP_COUNTER = 10000000/"#CLEANUP_COUNTER = 100/"#' experiment1.sh
