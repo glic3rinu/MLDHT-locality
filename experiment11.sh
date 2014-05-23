@@ -53,6 +53,12 @@ def _got_peers(l_id, peers, node_):
 counter = 0
 wait = random.randrange(60, 300)
 while True:
+    # Get routing table entries
+    rnodes = pymdht_node.controller._routing_m.get_main_rnodes()
+    addrs = ','.join([ rnode.addr[0] for rnode in rnodes])
+    rtts = ','.join([ '%.2f' % (rnode.rtt*1000) for rnode in rnodes ])
+    pid = str(os.getpid())
+    timestamp = str(time.time())
     # Log routing table entries
     with open('/root/routing.table', 'a') as log:
         log.write(' '.join((pid, timestamp, addrs, rtts)) + '\n')
@@ -68,13 +74,6 @@ while True:
             for info_hash in info_file.readlines()[ini:end]:
                 info_hash = identifier.Id(info_hash.strip())
                 pymdht_node.controller._tracker.put(info_hash, random_peer())
-        
-        # Get routing table entries
-        rnodes = pymdht_node.controller._routing_m.get_main_rnodes()
-        addrs = ','.join([ rnode.addr[0] for rnode in rnodes])
-        rtts = ','.join([ '%.2f' % (rnode.rtt*1000) for rnode in rnodes ])
-        pid = str(os.getpid())
-        timestamp = str(time.time())
         
         # Make queries to all IDs
         with open('/root/infohashes.list', 'r') as info_file:
