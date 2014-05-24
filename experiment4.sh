@@ -61,12 +61,17 @@ while True:
     # Get routing table entries
     rnodes = pymdht_node.controller._routing_m.get_main_rnodes()
     addrs = ','.join([ rnode.addr[0] for rnode in rnodes])
-    rtts = ','.join([ '%.2f' % (rnode.rtt*1000) for rnode in rnodes ])
+    rtts = []
+    for rnode in rnodes:
+        self_id = repr(my_id).upper()
+        rnode_id = repr(rnode.id).upper()
+        if not rnode_id.startswith(self_id[:6]):
+            rtts.append('%.2f' % (rnode.rtt*1000))
     pid = str(os.getpid())
     timestamp = str(time.time())
     # Log routing table entries
     with open('/root/routing.table', 'a') as log:
-        log.write(' '.join((pid, timestamp, addrs, rtts)) + '\n')
+        log.write(' '.join((pid, timestamp, addrs, ','.join(rtts))) + '\n')
     pymdht_node.get_peers(ident, info_hash, _got_peers)
     pymdht_node.controller._tracker.put(info_hash, random_peer())
     time.sleep(50)

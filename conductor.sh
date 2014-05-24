@@ -10,7 +10,10 @@ COUNTER=$(wc -l nodes.list|awk {'print $1'})
 #killall ssh
 
 
+sed -i '/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2/" /' experiment4.sh
+
 get_two_bucked_ids $COUNTER
+exit
 python split-nodes.py | bash deploy.sh 4
 sleep $((62*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100
