@@ -47,7 +47,7 @@ for result in glob.glob('results/' + FILES):
                 time = int(time.split('.')[0])
                 nodes[node].append((time, hops, latencies))
             
-                key = int(str(time)[:-2] + '00')
+                key = int(str(time)[:-2] + '50')
                 times.setdefault(key, [])
                 times[key].append((time, hops, latencies))
         
@@ -74,11 +74,11 @@ for result in glob.glob('results/' + FILES):
             plt.plot(node_times, node_latencies)
         
         t_result, h_result, l_result = [], [], []
-        for time, values in times.iteritems():
+        for time, values in sorted(times.iteritems()):
             time_hops = []
             time_latencies = []
             for value in values:
-                time, hops, latencies = value
+                __, hops, latencies = value
                 if hops:
                     hops = sum(hops)/len(hops)
                     time_hops.append(hops)
@@ -91,13 +91,12 @@ for result in glob.glob('results/' + FILES):
                 l_result.append(sum(time_latencies)/len(time_latencies)/20 if time_latencies else None)
         
         xi = np.array(t_result)
-        xi = np.array(t_result)
         A = np.array([ xi, np.ones(len(xi))])
-        y = np.array(h_result, dtype=np.float)
-        y = np.ma.masked_array(y, np.isnan(y))
+#        y = np.array(h_result, dtype=np.float)
+#        y = np.ma.masked_array(y, np.isnan(y))
+        y = np.array(h_result)
         w = np.linalg.lstsq(A.T,y)[0]
         line = w[0]*xi+w[1]
-        
         plt.subplot(313)
         plt.title(result + " Slotted")
         plt.plot(t_result, h_result, 'g^', t_result, l_result, 'bs', t_result, line,'g-')
