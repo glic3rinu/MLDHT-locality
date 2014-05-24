@@ -59,14 +59,15 @@ def _got_peers(l_id, peers, node_):
 
 while True:
     # Get routing table entries
-    rnodes = pymdht_node.controller._routing_m.get_main_rnodes()
-    addrs = ','.join([ rnode.addr[0] for rnode in rnodes])
-    rtts = []
-    for rnode in rnodes:
+    _rnodes = pymdht_node.controller._routing_m.get_main_rnodes()
+    rnodes = []
+    for rnode in _rnodes:
         self_id = repr(my_id).upper()
         rnode_id = repr(rnode.id).upper()
         if not rnode_id.startswith(self_id[:6]):
-            rtts.append('%.2f' % (rnode.rtt*1000))
+            rnodes.append(rnode)
+    addrs = ','.join([ rnode.addr[0] for rnode in rnodes])
+    rtts = [ '%.2f' % (rnode.rtt*1000) for rnode in rnodes ]
     pid = str(os.getpid())
     timestamp = str(time.time())
     # Log routing table entries
