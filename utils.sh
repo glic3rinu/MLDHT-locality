@@ -17,7 +17,7 @@ import identifier
 base_ident = repr(identifier.RandomId())
 for i in range($1+2):
     ident = repr(identifier.RandomId())
-    ident = base_ident[:30] + ident[30:]
+    ident = base_ident[:38] + ident[38:]
     print(ident)
 
 " | python > /tmp/infohashes.list
