@@ -9,7 +9,7 @@ from pylab import plot,show
 FILES = '*'
 LONELY = None
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     FILES = sys.argv[1]
 
 if len(sys.argv) == 3:

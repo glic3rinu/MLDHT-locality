@@ -22,3 +22,19 @@ for i in range($1+2):
 
 " | python > /tmp/infohashes.list
 }
+
+
+function get_two_bucked_ids() {
+    TOTAL=$(($1+4))
+    gen_close_ids $TOTAL
+    ONE=$(cat /tmp/infohashes.list)
+    gen_close_ids $TOTAL
+    TWO=$(cat /tmp/infohashes.list)
+    for i in $(seq $TOTAL); do
+        if [[ $(($i%2)) -eq 0 ]]; then
+            echo -e "$ONE" | sed -n -e ${i}p
+        else
+            echo -e "$TWO" | sed -n -e ${i}p
+        fi
+    done
+}
