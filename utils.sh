@@ -36,5 +36,5 @@ function get_two_bucked_ids() {
         else
             echo -e "$TWO" | sed -n -e ${i}p
         fi
-    done
+    done > /tmp/infohashes.list
 }
