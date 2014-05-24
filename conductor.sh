@@ -101,18 +101,6 @@ sed -i 's/sed -i "s\/if rtt/#sed -i "s\/if rtt/' experiment4.sh
 sed -i 's/sed -i "s\/^MAX_NUM_TIMEOUTS/#sed -i "s\/^MAX_NUM_TIMEOUTS/' experiment4.sh
 
 
-cp /tmp/infohashes.list3 /tmp/infohashes.list
-python split-nodes.py | bash deploy.sh 4
-sleep $((12*60))
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100-original-nodes2
-sleep 100
-python split-nodes.py | bash execute.sh "pkill -f client.py;"
-python split-nodes.py | bash execute.sh "pkill -f bash;"
-python split-nodes.py | bash execute.sh "pkill -f sleep;"
-
-sleep 80
-killall ssh
-
 gen_close_ids $COUNTER
 python split-nodes.py | bash deploy.sh 3
 sleep $((62*60))
