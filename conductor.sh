@@ -13,11 +13,24 @@ COUNTER=$(wc -l nodes.list|awk {'print $1'})
 mv /tmp/infohashes.list1 /tmp/infohashes.list
 python split-nodes.py | bash deploy.sh 4
 sleep $((62*60))
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100-nodes1
 
 
 sleep 180
 killall ssh
+
+
+sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
+
+python split-nodes.py | bash deploy.sh 4
+sleep $((62*60))
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100-nodes2
+
+sleep 180
+killall ssh
+
+
+sed -i 's/DEFAULT_NUM_NODES = 2\/" /DEFAULT_NUM_NODES = 1\/" /' experiment4.sh
 
 mv /tmp/infohashes.list2 /tmp/infohashes.list
 python split-nodes.py 3 0 | bash deploy.sh 4
@@ -28,20 +41,38 @@ python split-nodes.py 3 2 | bash deploy.sh 4
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f bash; pkill -f experiment4.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-churn3-cache100
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-churn3-cache100-nodes1
 
 
 sleep 180
 killall ssh
 
+
+
+sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
+
+python split-nodes.py 3 0 | bash deploy.sh 4
+sleep $((20*60))
+python split-nodes.py 3 1 | bash deploy.sh 4
+sleep $((20*60))
+python split-nodes.py 3 2 | bash deploy.sh 4
+sleep $((20*60))
+python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f bash; pkill -f experiment4.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
+sleep 60
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-churn3-cache100-nodes2
+
+
+sleep 180
+killall ssh
 # ORIGINAL
 sed -i 's/sed -i "s\/if rtt/#sed -i "s\/if rtt/' experiment4.sh
 sed -i 's/sed -i "s\/^MAX_NUM_TIMEOUTS/#sed -i "s\/^MAX_NUM_TIMEOUTS/' experiment4.sh
 
+
 mv /tmp/infohashes.list3 /tmp/infohashes.list
 python split-nodes.py | bash deploy.sh 4
 sleep $((62*60))
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100-original
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-cache100-original-nodes2
 
 
 sleep 180
@@ -56,7 +87,7 @@ python split-nodes.py 3 2 | bash deploy.sh 4
 sleep $((20*60))
 python split-nodes.py | bash execute.sh "pkill -f client.py; pkill -f bash; pkill -f experiment4.sh; pkill -f experiment2.sh; pkill -f experiment3.sh"
 sleep 60
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-churn3-cache100-original
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4-churn3-cache100-original-nodes2
 
 sleep 180
 killall ssh
