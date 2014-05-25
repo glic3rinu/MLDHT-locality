@@ -1,4 +1,5 @@
-# COUNTER=0; TOTAL=0; for i in $(cat hops |awk {'print $2'}|grep -v ^$|tr ',' '\n'); do TOTAL=$(($TOTAL+$i)); COUNTER=$(($COUNTER+1)); done; echo "$TOTAL/$COUNTER" | bc
+# COUNTER=0; TOTAL=0; for i in $(cat hops |awk {'print $2'}|grep ','|tr ',' '\n'); do TOTAL=$(($TOTAL+$i)); COUNTER=$(($COUNTER+1)); done; echo "$TOTAL/$COUNTER" | bc
+# python -c "import sys; import numpy; a = eval('["%s"]' % sys.argv[1]); print numpy.std(a);" $(cat results/hops |awk {'print $2'}|grep ','|tr ',' '\n'|tr '\n' ',')
 # AVG = 7
 #cat nodes.list | while read IP; do scp -o stricthostkeychecking=no traceroute.sh root@[$IP]: & done
 #cat nodes.list | bash execute.sh "bash traceroute.sh" > results/hops
