@@ -14,7 +14,7 @@ COUNTER=$(wc -l nodes.list|awk {'print $1'})
 
 cp /tmp/infohashes.list1 /tmp/infohashes.list
 python split-nodes.py | bash deploy.sh 4
-sleep $((12*60))
+sleep $((30*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.2-cache100-nodes1
 
 sleep 100
@@ -27,9 +27,10 @@ killall ssh
 
 
 sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
+cp /tmp/infohashes.list2 /tmp/infohashes.list
 
 python split-nodes.py | bash deploy.sh 4
-sleep $((12*60))
+sleep $((30*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.2-cache100-nodes2
 
 sleep 100
@@ -42,6 +43,7 @@ killall ssh
 
 
 sed -i 's/DEFAULT_NUM_NODES = 2\/" /DEFAULT_NUM_NODES = 3\/" /' experiment4.sh
+cp /tmp/infohashes.list3 /tmp/infohashes.list
 
 python split-nodes.py | bash deploy.sh 4
 sleep $((12*60))
@@ -57,13 +59,13 @@ killall ssh
 
 sed -i 's/DEFAULT_NUM_NODES = 3\/" /DEFAULT_NUM_NODES = 1\/" /' experiment4.sh
 
-cp /tmp/infohashes.list2 /tmp/infohashes.list
+cp /tmp/infohashes.list4 /tmp/infohashes.list
 python split-nodes.py 3 0 | bash deploy.sh 4
-sleep $((5*60))
+sleep $((10*60))
 python split-nodes.py 3 1 | bash deploy.sh 4
-sleep $((5*60))
+sleep $((10*60))
 python split-nodes.py 3 2 | bash deploy.sh 4
-sleep $((6*60))
+sleep $((10*60))
 sleep 100
 python split-nodes.py | bash execute.sh "pkill -f client.py;"
 python split-nodes.py | bash execute.sh "pkill -f bash;"
@@ -79,13 +81,14 @@ killall ssh
 
 
 sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
+cp /tmp/infohashes.list1 /tmp/infohashes.list
 
 python split-nodes.py 3 0 | bash deploy.sh 4
-sleep $((5*60))
+sleep $((10*60))
 python split-nodes.py 3 1 | bash deploy.sh 4
-sleep $((5*60))
+sleep $((10*60))
 python split-nodes.py 3 2 | bash deploy.sh 4
-sleep $((5*60))
+sleep $((10*60))
 sleep 100
 python split-nodes.py | bash execute.sh "pkill -f client.py;"
 python split-nodes.py | bash execute.sh "pkill -f bash;"
@@ -103,7 +106,7 @@ sed -i 's/sed -i "s\/^MAX_NUM_TIMEOUTS/#sed -i "s\/^MAX_NUM_TIMEOUTS/' experimen
 
 gen_close_ids $COUNTER
 python split-nodes.py | bash deploy.sh 3
-sleep $((62*60))
+sleep $((42*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp3.2-cache100-2-original
 
 sleep 180
@@ -111,7 +114,7 @@ killall ssh
 
 gen_close_ids $COUNTER
 python split-nodes.py | bash deploy.sh 3
-sleep $((62*60))
+sleep $((42*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp3.2-cache100-2-original
 
 sleep 180
@@ -120,7 +123,7 @@ killall ssh
 gen_ids $COUNTER 1
 sed -i 's#CLEANUP_COUNTER = 100/"#CLEANUP_COUNTER = 1/"#' experiment1.sh
 python split-nodes.py | bash deploy.sh 1 1
-sleep $((62*60))
+sleep $((42*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp1-ids1-cache
 
 sleep 180
@@ -128,7 +131,7 @@ killall ssh
 
 gen_ids $COUNTER 2
 python split-nodes.py | bash deploy.sh 1 1
-sleep $((62*60))
+sleep $((42*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp1.1-ids1-cache
 
 
