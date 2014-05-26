@@ -15,7 +15,7 @@ COUNTER=$(wc -l nodes.list|awk {'print $1'})
 cp /tmp/infohashes.list1 /tmp/infohashes.list
 python split-nodes.py | bash deploy.sh 4
 sleep $((30*60))
-python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.2-cache100-nodes1
+python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.3-cache100-nodes1
 
 sleep 100
 python split-nodes.py | bash execute.sh "pkill -f client.py;"
@@ -24,7 +24,7 @@ python split-nodes.py | bash execute.sh "pkill -f sleep;"
 sleep 80
 
 killall ssh
-
+exit
 
 sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
 cp /tmp/infohashes.list2 /tmp/infohashes.list
