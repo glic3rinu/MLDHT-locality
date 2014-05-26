@@ -88,7 +88,7 @@ echo "Patching pymdht..."
 # try to prevent minitwisted to crash ...
 sed -i "s/self._all_subnets.remove(utils.get_subnet(addr))/try: self._all_subnets.remove(utils.get_subnet(addr))\n        except KeyError: pass/" core/bootstrap.py
 # Adapt bucket dimensioning to our DHT small size
-sed -i "s/^DEFAULT_NUM_NODES = 8/DEFAULT_NUM_NODES = 2/" plugins/routing_nice_rtt.py
+sed -i "s/^DEFAULT_NUM_NODES = 8/DEFAULT_NUM_NODES = 1/" plugins/routing_nice_rtt.py
 # Change routing policy
 #sed -i "s/^MAX_NUM_TIMEOUTS = 2/MAX_NUM_TIMEOUTS = -1/" plugins/routing_nice_rtt.py
 #sed -i "s/if rtt < rnode.rtt \* (1 - (rnode_age \/ 7200)):/if rtt < rnode.rtt:/" plugins/routing_nice_rtt.py
