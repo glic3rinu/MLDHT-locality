@@ -46,7 +46,7 @@ for result in glob.glob('results/' + FILES):
                 nodes.setdefault(node, [])
                 time = int(time.split('.')[0])
                 nodes[node].append((time, hops, latencies))
-            
+                
                 key = int(str(time)[:-2] + '50')
                 times.setdefault(key, [])
                 times[key].append((time, hops, latencies))
@@ -61,10 +61,10 @@ for result in glob.glob('results/' + FILES):
                 time, hops, latencies = value
                 node_times.append(time)
                 if hops:
-                    hops = sum(hops)/len(hops)
+                    hops = np.mean(hops) #sum(hops)/len(hops)
                 node_hops.append(hops)
                 if latencies:
-                    latencies = sum(latencies)/len(latencies)
+                    latencies = np.mean(latencies) #sum(latencies)/len(latencies)
                 node_latencies.append(latencies)
             plt.subplot(311)
             plt.title(result + " Hops")
@@ -80,15 +80,15 @@ for result in glob.glob('results/' + FILES):
             for value in values:
                 __, hops, latencies = value
                 if hops:
-                    hops = sum(hops)/len(hops)
+                    hops = np.mean(hops) #sum(hops)/len(hops)
                     time_hops.append(hops)
                 if latencies:
-                    latencies = sum(latencies)/len(latencies)
+                    latencies = np.mean(latencies) #sum(latencies)/len(latencies)
                     time_latencies.append(latencies)
             if time_hops:
                 t_result.append(time)
-                h_result.append(sum(time_hops)/len(time_hops) if time_hops else None)
-                l_result.append(sum(time_latencies)/len(time_latencies)/20 if time_latencies else None)
+                h_result.append(np.mean(time_hops) if time_hops else None)
+                l_result.append(np.mean(time_latencies)/20 if time_latencies else None)
         
         xi = np.array(t_result)
         A = np.array([ xi, np.ones(len(xi))])
