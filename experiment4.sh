@@ -50,8 +50,14 @@ def random_peer():
     return (ip, 17000)
 
 # Announce node IDs assigned to this NODE_NUMBER
-group = ($NODE_NUMBER+1) % 2
-info_hash = identifier.Id(open('/root/infohashes.list', 'r').readlines()[group].strip())
+group = (38+1) % 2
+get_info_hash = identifier.Id(open('/root/infohashes.list', 'r').readlines()[group].strip())
+if group == 1:
+    group = 0
+else:
+    group = 1
+my_info_hash = identifier.Id(open('/root/infohashes.list', 'r').readlines()[group].strip())
+
 
 def _got_peers(l_id, peers, node_):
     with open('/tmp/got_peers.log', 'a') as log:
@@ -73,8 +79,8 @@ while True:
     # Log routing table entries
     with open('/root/routing.table', 'a') as log:
         log.write(' '.join((pid, timestamp, addrs, ','.join(rtts))) + '\n')
-    pymdht_node.get_peers(ident, info_hash, _got_peers)
-    pymdht_node.controller._tracker.put(info_hash, random_peer())
+    pymdht_node.get_peers(ident, get_info_hash, _got_peers)
+    pymdht_node.controller._tracker.put(my_info_hash, random_peer())
     time.sleep(50)
 " > client.py
 
