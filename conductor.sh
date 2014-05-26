@@ -14,7 +14,7 @@ COUNTER=$(wc -l nodes.list|awk {'print $1'})
 
 cp /tmp/infohashes.list1 /tmp/infohashes.list
 python split-nodes.py | bash deploy.sh 4
-sleep $((62*60))
+sleep $((32*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.3-cache100-nodes1
 
 sleep 100
@@ -29,7 +29,7 @@ sed -i 's/DEFAULT_NUM_NODES = 1\/" /DEFAULT_NUM_NODES = 2\/" /' experiment4.sh
 cp /tmp/infohashes.list2 /tmp/infohashes.list
 
 python split-nodes.py | bash deploy.sh 4
-sleep $((62*60))
+sleep $((32*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.2-cache100-nodes2
 
 sleep 100
@@ -45,7 +45,7 @@ sed -i 's/DEFAULT_NUM_NODES = 2\/" /DEFAULT_NUM_NODES = 3\/" /' experiment4.sh
 cp /tmp/infohashes.list3 /tmp/infohashes.list
 
 python split-nodes.py | bash deploy.sh 4
-sleep $((62*60))
+sleep $((32*60))
 python split-nodes.py | bash execute.sh "bash collect.sh" > results/exp4.2-cache100-nodes3
 
 sleep 100
@@ -60,11 +60,11 @@ sed -i 's/DEFAULT_NUM_NODES = 3\/" /DEFAULT_NUM_NODES = 1\/" /' experiment4.sh
 
 cp /tmp/infohashes.list4 /tmp/infohashes.list
 python split-nodes.py 3 0 | bash deploy.sh 4
-sleep $((20*60))
+sleep $((10*60))
 python split-nodes.py 3 1 | bash deploy.sh 4
-sleep $((20*60))
+sleep $((10*60))
 python split-nodes.py 3 2 | bash deploy.sh 4
-sleep $((20*60))
+sleep $((10*60))
 sleep 100
 python split-nodes.py | bash execute.sh "pkill -f client.py;"
 python split-nodes.py | bash execute.sh "pkill -f bash;"
