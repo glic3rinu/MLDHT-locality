@@ -167,7 +167,7 @@ Each DHT node announces N infohashes and periodically performs a \texttt{GET\_PE
     \label{fig:exp1,1-ids1-cache0}
 \end{figure}
 
-Figure \ref{fig:exp1,1-ids1-cache0} shows an steady average of 6 hops, a value very close to the network mean 7.5. This is because nodes perform queries to random buckets, and because we have an average of less than one node per bucket $26/160$, there is no chance for the routing policy to perform any kind of selection based on RTT measurements.
+Figure \ref{fig:exp1,1-ids1-cache0} shows an steady average of 6 hops, a value very close to the network mean 7.5. This is because nodes perform queries to random buckets, and because we have an average of less than one node per bucket $26/160$, there is little chance for the routing policy to perform selection based on RTT measurements, only the farthest buckets from each node ID has several competing routing nodes.
 
 A second round of this workload has been executed but now with caching enabled. After a very few rounds \texttt{GET\_PEERS} results are cached over several nodes. Thus, giving more chance to lower latency nodes to be selected as routing nodes.
 
