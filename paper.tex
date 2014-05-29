@@ -41,7 +41,7 @@ Email: benat.txurruka@est.fib.upc.edu}
 \begin{abstract}
 Community Networks (CN) are an emerging bottom-up model where communities of citizens build, operate and own open IP-based networks. In contrast to the traditional Internet, the core of these networks is build using unreliable wireless links and cheap low-end forwarding devices. For this reason, locality-aware applications become particular important in Community Networks.
 
-Distributed Hash Tables (DHT), is a well known and mature decentralized key-value store system. Mainline DHT, the larger DHT deployed world-wide, is commonly used for storing BitTorrent peers, but it works for arbitrary data as well. Even though, Mainline DHT specifications do not provide mechanism that encourage locality, we have done so by choosing a particular \textit{Proximity Neighbour Selection} routing policy that encourages locality by choosing routing nodes with the lower round-trip-time (RTT).
+Distributed Hash Tables (DHT) is a well known and mature decentralized key-value store system. Mainline DHT, the larger DHT deployed world-wide, is commonly used for storing BitTorrent peers, but it works for arbitrary data as well. Even though, Mainline DHT specifications do not provide mechanism that encourage locality, we have done so by choosing a particular \textit{Proximity Neighbour Selection} routing policy that encourages locality by choosing routing nodes with the lower round-trip-time (RTT).
 
 In this paper we provide a preliminary study of the locality characteristics of the Mainline DHT using PYMDHT and one of its routing policies based on RTT measurements.
 \end{abstract}
@@ -77,7 +77,7 @@ Network locality (proximity) in Distributed Hash Tables has been extensively stu
 
 \subsection{Geographic Layout}
 
-The node IDs are assigned in a manner that ensures that nodes that are close in the network topology are close in the node ID space. Geographic Layout was explored as one technique to improve routing performance in CAN \cite{b4}. In one implementation, nodes measure the RTT between themselves and a set of landmark servers to compute the coordinates of the node in the CAN space.
+The node IDs are assigned in a manner that ensures that nodes that are close in the network topology are close in the node ID space. \textit{Geographic Layout} was explored as one technique to improve routing performance in CAN \cite{b4}. In one implementation, nodes measure the RTT between themselves and a set of landmark servers to compute the coordinates of the node in the CAN space.
 
 \subsection{Proximity Routing}
 
@@ -177,7 +177,7 @@ A second round of this workload has been executed but now with caching enabled. 
     \label{fig:exp1-ids1-cache100}
 \end{figure}
 
-In figure \ref{fig:exp1-ids1-cache100} we see how caching seems to makes convergence to a better locality value, but repetitions of this same experiments shown mixed results. At this point we are not able to conclude that caching leads to better locality, at least in our 26 node DHT. However, caching seems to affect the patter on the routing table hops and latencies, compared with fig. \ref{fig:exp1,1-ids1-cache0}.
+In figure \ref{fig:exp1-ids1-cache100} we see how caching seems to makes convergence to a better locality value, but repetitions of this same experiments show mixed results. At this point we are not able to conclude that caching leads to better locality, at least in our 26 node DHT. However, caching seems to affect the patter on the routing table hops and latencies, compared with fig. \ref{fig:exp1,1-ids1-cache0}.
 
 In order to see how churn affects locality we have divided the experiment in 3 phases. In each phase 1/3 of our nodes are added to the DHT. The idea behind this is to gradually increase the number of nearby nodes and see how the routing algorithm adapts to it.
 
@@ -191,7 +191,7 @@ In Figure \ref{fig:churn-1} we can see the gradual selection of nearer nodes as 
 
 \subsection{Close IDs Workload}
 
-All node's 120 most significant bits are the same, also an infohash with the same characteristics is inserted in the DHT and all the nodes perform periodic \texttt{GET\_PEERS} requests of this infohash.
+All node's ID 120 most significant bits are the same, also an infohash with the same characteristics is inserted in the DHT and all the nodes perform periodic \texttt{GET\_PEERS} requests of this infohash.
 
 This workload is designed to characterize the locality of nearby nodes in terms of the overlay network. Since our DHT size is very small, we decided to force all the nodes to be compacted on the same portion of the ID space in order to determine how the routing policy performs with some logical nearby nodes.
 
@@ -214,11 +214,11 @@ In Figure \ref{fig:exp3-churn3-cache100-2} we see that churn actually harms loca
 
 \subsection{Lonely Node Workload}
 
-This experiment also uses crafted node IDs to force all node's ID being in the same bucket, from the lonely node point of view. We want to create a lot of bucket competition on the lonely node routing table and validate that the physically nearest node is always chosen.
+This experiment also uses crafted node IDs to force all node's ID being in the same bucket from the lonely node point of view. We want to create a lot of bucket competition on the lonely node routing table and validate that the physically nearest node is always chosen.
 
 Interestingly enough, Community Lab topology includes the type of node clustering commonly seen in Community Network villages and described on the introductory chapter. In the case of Community Lab those are the nodes at UPC-Lab, where only one forwarding device sits between the nodes \cite{b19}.
 
-The lonely node is selected from this cluster since it will have plenty of nearby candidates to choose from. Figure \ref{fig:exp2,2-cache100-node39-original} illustrates the results of this experiment.
+The lonely node is selected from this cluster since it have plenty of nearby candidates to choose from. Figure \ref{fig:exp2,2-cache100-node39-original} illustrates the results of this experiment.
 
 \begin{figure}
     \includegraphics[width=\columnwidth]{exp2,2-cache100-node39-original.png}
@@ -243,7 +243,7 @@ Figure \ref{fig:exp4,2-cache100-nodes1} shows the results, in this case we only 
 
 The main limitation of our evaluation is the reduced number of nodes in our testbed. Further analysis should be performed in order to better understand the locality characteristics of Mainline DHT, specially under realistic workloads.
 
-Solely using the average number of hops may not be a good enough locality evaluator. A better one could be the average number of hops of the routing entries over the average number of hops to other nodes, ($\frac{avg(routing\_hops)}{avg(total\_hops}$), or even better, the potential optimal value over the current value. In short, making the values dependent of each node will give a better fit.
+Solely using the average number of hops may not be a good enough locality evaluator. A better one could be the average number of hops of the routing entries over the average number of hops to other nodes, ($\frac{avg(routing\_hops)}{avg(total\_hops}$). Or even better, the potential optimal value over the current value. In short, making the values dependent of each node vision of the network will give a better fit.
 
 Measurements of the number of underlay hops of the \texttt{ANNOUNCE\_PEER} and \texttt{GET\_PEERS} queries are missing in our evaluation, but are key measurements to better understand locality in a DHT.
 
