@@ -12,6 +12,7 @@ CMD=$(cat <<- EOF
 	controller = Api("https://controller.community-lab.net/api/")
 	slivers = controller.slivers.retrieve()
 	slivers.retrieve_related("node", "slice")
+	slivers = slivers.filter(slice__id=SLICE_ID)
 	
 	# 0. Adds new slivers to SLICE_ID
 	nodes = controller.nodes.retrieve()
@@ -29,13 +30,14 @@ CMD=$(cat <<- EOF
 	    }
 	]
 	for node in new_nodes:
-	    controller.slivers.create(slice=slice, node=node, interfaces=interfaces)
+	    sliver = controller.slivers.create(slice=slice, node=node, interfaces=interfaces)
+	    slivers.append(sliver)
 	
 	# 1. Gets all mgmt IPs of SLICE_ID slivers
 	MGMT_IPV6_PREFIX = controller.testbed_params.mgmt_ipv6_prefix
 	int_to_hex_str = lambda i,l: ("%." + str(l) + "x") % i
 	split_by_len = lambda s,l: [s[i:i+l] for i in range(0, len(s), l)]
-	for sliver in slivers.filter(slice__id=SLICE_ID):
+	for sliver in slivers:
 	    node_id = sliver.node.id
 	    slice_id = sliver.slice.id
 	    for iface in sliver.interfaces:
@@ -54,14 +56,14 @@ CMD=$(cat <<- EOF
 SLIVERS=$(python -c "$CMD")
 
 
-# 2. Gets all the public ips of SLICE_ID slivers
+# 2. Gets all the public IPs of SLICE_ID slivers
 CMD="/sbin/ifconfig pub0|grep 'inet addr:'|cut -d':' -f2 | sed 's/ Bcast//'"
 PUBLIC_ADDRESSES=$(echo -e "$SLIVERS" | while read IP; do
 		ssh -i ~/.ssh/confine -o stricthostkeychecking=no root@$IP "$CMD" 2> /dev/null &
 	done)
 
 
-# 3. Performs a fulll-mesh traceroute of every sliver in SLICE_ID
+# 3. Performs a full-mesh traceroute of every sliver in SLICE_ID
 echo -e "$SLIVERS" | while read IP; do
     {
       cat <<- EOF | ssh -t -q -i ~/.ssh/confine -o stricthostkeychecking=no root@$IP || echo "0000000000f9_"$(echo $IP|cut -d':' -f4)
