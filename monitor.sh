@@ -1,6 +1,27 @@
 #!/bin/bash
 
-# CRONTAB: 0 0,6,12,18 * * * cd /var/www; bash monitor.sh
+# PROVIDES METRICS ABOUT SLIVERS CONNECTIVITY
+# This is a life experiment that automatically adds new slivers to itself and
+# performs new measurements every 6 hours
+#
+# REQUIRES: pip install confine-orm
+# CRONTAB: 0 0,6,12,18 * * * cd /var/www && bash monitor.sh
+
+
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+#
+# Copyright (C) 2014 Marc Aymerich <marcay@pangea.org>
+#
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+#
+#  0. You just DO WHAT THE FUCK YOU WANT TO.
+
 
 
 SLICE_ID=${1:-365}
@@ -107,14 +128,14 @@ CMD=$(cat <<- EOF
 	        if not line:
 	            print '<br>'
 	            continue
-	        elif len(line) == 2:
+	        elif len(line) == 3:
 	            line += [False]
-	        name, value, bold = line
+	        name, value, help, bold = line
 	        spaces = 50-len(name)-len(value)
 	        line = name + ' '*(spaces%2) + ' .'*(spaces/2) + ' ' + value + '<br>'
 	        if bold:
 	            line = "<b>%s</b>" % line
-	        print line
+	        print '<span title="%s">%s</span>' % (help, line)
 	
 	with open("results.txt.tmp", "r") as results:
 	    for line in results.readlines():
@@ -160,22 +181,59 @@ CMD=$(cat <<- EOF
 	    online = (slivers-offline)
 	    connected = online-partial-disconnected
 	    data = [
-	        ["SLIVERS", str(slivers)],
-	        ["HEALTHY", "%s/%s %.2f%%" % (healthy, slivers, float(healthy)/slivers*100), True],
-	        [],
-	        ["ONLINE", "%s/%s %.2f%%" % (online, slivers, float(online)/slivers*100)],
-	        ["OFFLINE", "%s/%s %.2f%%" % (offline, slivers, float(offline)/slivers*100)],
-	        ["INTERNET CONNECTION", "%s/%s %.2f%%" % (internet, online, float(internet)/online*100)],
-	        ["DISCONNECTED", "%s/%s %.2f%%" % (disconnected, online, float(disconnected)/online*100)],
-	        ["PARTIALLY CONNECTED", "%s/%s %.2f%%" % (partial, online, float(partial)/online*100)],
-	        ["WELL CONNECTED", "%s/%s %.2f%%" % (connected, online, float(connected)/online*100)],
-	        [],
-	        ["CONNECTIVITY FACTOR", "%.2f" % (float(connectivity)/links)],
-	        ["AVG HOPS", "%.2f" % (float(avg_hops)/connectivity)],
-	        ["ISLANDS", str(islands), True],
+	        [
+	            "SLIVERS",
+	            "%i/%i" % (slivers, slivers),
+	            "Slivers over the total number of nodes. Always 100% beucause slivers are added automatically when new nodes are added",
+	        ], [
+	            "HEALTHY",
+	            "%s/%s %.2f%%" % (healthy, slivers, float(healthy)/slivers*100),
+	            "Healthy slivers have Internet connection and are able to see at least half of the other online slivers",
+	            True,
+	        ], [
+	        ], [
+	            "ONLINE",
+	            "%s/%s %.2f%%" % (online, slivers, float(online)/slivers*100),
+	            "Online slivers are those accessible over the mgmt network",
+	        ], [
+	            "OFFLINE",
+	            "%s/%s %.2f%%" % (offline, slivers, float(offline)/slivers*100),
+	            "Offline slivers can not be accessed over the mgmt network and are assumed offline",
+	        ], [
+	            "INTERNET CONNECTION",
+	            "%s/%s %.2f%%" % (internet, online, float(internet)/online*100),
+	            "Sliver can ping to a well known Internet address (8.8.8.8)",
+	        ], [
+	            "DISCONNECTED",
+	            "%s/%s %.2f%%" % (disconnected, online, float(disconnected)/online*100),
+	            "Disconnected slivers can not ping to any other sliver's public IP than themselves",
+	        ], [
+	            "PARTIALLY CONNECTED",
+	            "%s/%s %.2f%%" % (partial, online, float(partial)/online*100),
+	            "Partially connected slivers can ping less than half of the other slivers public IPs",
+	        ], [
+	            "WELL CONNECTED",
+	            "%s/%s %.2f%%" % (connected, online, float(connected)/online*100),
+	            "Well connected slivers can ping at least half of the other slivers public IPs",
+	        ], [
+	        ], [
+	            "CONNECTIVITY FACTOR",
+	            "%.2f" % (float(connectivity)/links),
+	            "Connectivity factor gives the level of connectivity between slivers on the public network (1 being fully connected and 0 totally disconnected)",
+	        ], [
+	            "AVG HOPS",
+	            "%.2f" % (float(avg_hops)/connectivity),
+	            "Average number of hops between slivers on the public network",
+	        ], [
+	            "ISLANDS",
+	            str(islands),
+	            "Islands are groups of nodes that can see each other but no one else's public IP",
+	            True,
+	        ],
 	    ]
 	    
-	    print "<html><body><center><pre><br><br><h1>Slivers Connectivity Status</h1>"
+	    print "<html><head><title>Slivers Connectivity Status</title></head>"
+	    print "<body><center><pre><br><br><h1>Slivers Connectivity Status</h1>"
 	    print "Generated on %s %s" % (datetime.now().strftime("%B %d, %Y %H:%M:%S"), time.tzname[0])
 	    print "<br>"
 	    print "<a href=\"https://controller.community-lab.net/admin/slices/slice/%i\">SLICE %i</a><br>" % (SLICE_ID, SLICE_ID)
@@ -192,4 +250,3 @@ python -c "$CMD" > summary.html.tmp && {
     mv summary.html.tmp summary.html
     echo "$PUBLIC_ADDRESSES" > public_addresses
 }
-
