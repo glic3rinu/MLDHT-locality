@@ -13,7 +13,7 @@ CMD=$(cat <<- EOF
 	slivers = controller.slivers.retrieve()
 	slivers.retrieve_related("node", "slice")
 	
-	# 0. auto add new slivers to SLICE_ID
+	# 0. Adds new slivers to SLICE_ID
 	nodes = controller.nodes.retrieve()
 	new_nodes = nodes.exclude(id__in=slivers.values_list('node__id'))
 	slice = slivers[0].slice
@@ -31,7 +31,7 @@ CMD=$(cat <<- EOF
 	for node in new_nodes:
 	    controller.slivers.create(slice=slice, node=node, interfaces=interfaces)
 	
-	# 1. Gets all mgmt ips of SLICE_ID slivers
+	# 1. Gets all mgmt IPs of SLICE_ID slivers
 	MGMT_IPV6_PREFIX = controller.testbed_params.mgmt_ipv6_prefix
 	int_to_hex_str = lambda i,l: ("%." + str(l) + "x") % i
 	split_by_len = lambda s,l: [s[i:i+l] for i in range(0, len(s), l)]
@@ -61,14 +61,13 @@ PUBLIC_ADDRESSES=$(echo -e "$SLIVERS" | while read IP; do
 	done)
 
 
-# 3. Perform a fulll-mesh traceroute of every sliver in SLICE_ID
+# 3. Performs a fulll-mesh traceroute of every sliver in SLICE_ID
 echo -e "$SLIVERS" | while read IP; do
     {
       cat <<- EOF | ssh -t -q -i ~/.ssh/confine -o stricthostkeychecking=no root@$IP || echo "0000000000f9_"$(echo $IP|cut -d':' -f4)
 		for IP in \$(echo -n "$PUBLIC_ADDRESSES"); do
 		    HOP=0
 		    ping -c 1 -w 3 \$IP &> /dev/null && HOP=\$(traceroute -w 1 -n \$IP | tail -n1 | awk {'print \$1'} 2> /dev/null)
-		    [[ "$HOP" == "" ]] && HOP=0
 		    HOPS="\$HOPS \$HOP"
 		done
 
@@ -81,7 +80,7 @@ echo -e "$SLIVERS" | while read IP; do
 done | grep ^0000000 > results.txt.tmp
 
 
-# 4. Analize the results and format them on HTML
+# 4. Analizes the results and formats them on HTML
 CMD=$(cat <<- EOF
 	import sys
 	import time
@@ -191,5 +190,4 @@ python -c "$CMD" > summary.html.tmp && {
     mv summary.html.tmp summary.html
     echo "$PUBLIC_ADDRESSES" > public_addresses
 }
-
 
