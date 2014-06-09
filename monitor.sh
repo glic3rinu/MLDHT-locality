@@ -18,7 +18,7 @@ CMD=$(cat <<- EOF
 	new_nodes = nodes.exclude(id__in=slivers.values_list('node__id'))
 	slice = slivers[0].slice
 	password = open('/root/.confine_password').read().strip()
-	controller.login(username='marcay', password=password)
+	controller.login(username='health', password=password)
 	interfaces = [
 	    {
 	        'type': 'private',
