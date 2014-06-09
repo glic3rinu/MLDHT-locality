@@ -5,7 +5,7 @@
 # performs new measurements every 6 hours
 #
 # REQUIRES: pip install confine-orm
-# CRONTAB: 0 0,6,12,18 * * * cd /var/www && bash monitor.sh
+# CRONTAB: 0 0,6,12,18 * * * cd /var/www && bash sliversConnectivityStatus.sh
 
 
 #            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
@@ -239,7 +239,7 @@ CMD=$(cat <<- EOF
 	    print "<a href=\"https://controller.community-lab.net/admin/slices/slice/%i\">SLICE %i</a><br>" % (SLICE_ID, SLICE_ID)
 	    print_data(data)
 	    print "<br>"
-	    print "<a href=\"results.txt\">Dataset</a> <a href=\"monitor.sh\">Code</a> <a href=\"public_addresses\">Public addresses</a>"
+	    print "<a href=\"results.txt\">Dataset</a> <a href=\"sliversConnectivityStatus.sh\">Code</a> <a href=\"public_addresses\">Public addresses</a>"
 	    print "</pre></center></body></html>"
 	EOF
 	)
